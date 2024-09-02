@@ -1,23 +1,18 @@
-import React, {
-  useState,
-  useEffect,
-  KeyboardEvent,
-  FormEvent,
-  ChangeEvent,
-  FocusEvent,
-} from "react";
+import { useState, KeyboardEvent, ChangeEvent, FocusEvent } from "react";
 import ItemTag from "./ItemTag";
-import { getFormatNumber } from "../../utils/Utils";
+import { formatNumberWithComma } from "@/utils/Utils";
 import FileInput from "./FileInput";
 import "./AddItemPage.css";
+import useAddAndEditProduct from "@/hooks/useAddAndEditProduct";
+import { ProductPostData } from "@/types/ProductTypes";
 
-function AddItemPage() {
+const AddItemPage = () => {
   // form 데이터 객체
   const [itemIntroduction, setFormData] = useState({
     itemTitle: { value: "", isValid: false },
-    itemIntro: { value: "", isValid: false },
-    itemPrice: { value: "", isValid: false },
+    itemPrice: { value: "", rawValue: 0, isValid: false },
     itemTag: { value: [] as string[], isValid: false },
+    itemDescription: { value: "", isValid: false },
   });
 
   // 파일 정보
@@ -26,6 +21,11 @@ function AddItemPage() {
   const isFormValid = Object.values(itemIntroduction).every(
     (input) => input.isValid
   );
+
+  const addProduct = useAddAndEditProduct({
+    onSuccessRedirectUrl: "/items",
+    productUrl: "products",
+  });
 
   // tag 배열 정보과 유효성 업데이트
   const updateTagAndValidity = (newTagArray: string[]) => {
@@ -49,6 +49,7 @@ function AddItemPage() {
 
   const handleTagChange = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      e.preventDefault();
       // 앞 뒤 빈칸 제거
       const inputElement = e.target as HTMLInputElement;
       const newValue = inputElement.value.trim();
@@ -81,24 +82,42 @@ function AddItemPage() {
   const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputPrice = e.target.value;
 
-    // 판매 가격 숫자만 입력 및 세자릿수마다 콤마 추가
-    const formattedPrice = getFormatNumber(inputPrice);
+    // 숫자만 입력 및 세자릿수마다 콤마 추가
+    const rawPrice = parseFloat(inputPrice.replace(/,/g, ""));
+    const formattedPrice = formatNumberWithComma(rawPrice.toString());
 
     setFormData((prevData) => ({
       ...prevData,
-      itemPrice: { value: formattedPrice, isValid: formattedPrice !== "" },
+      itemPrice: {
+        value: formattedPrice,
+        rawValue: rawPrice,
+        isValid: !isNaN(rawPrice),
+      },
     }));
-  };
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
   };
 
   const handleFileChange = (file: File | null) => {
     setFileValue(() => file);
   };
 
-  useEffect(() => {}, [itemIntroduction]);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const newProduct: ProductPostData = {
+      images: [],
+      tags: itemIntroduction.itemTag.value,
+      price: itemIntroduction.itemPrice.rawValue,
+      description: itemIntroduction.itemDescription.value,
+      name: itemIntroduction.itemTitle.value,
+    };
+
+    if (fileValue) {
+      addProduct.mutate({
+        productData: newProduct,
+        file: fileValue,
+      });
+    }
+  };
 
   return (
     <section className="add-item-page">
@@ -124,7 +143,7 @@ function AddItemPage() {
         />
         <h2>상품 소개</h2>
         <textarea
-          id="itemIntro"
+          id="itemDescription"
           placeholder="상품소개를 입력해주세요"
           onBlur={handleChange}
         />
@@ -134,7 +153,6 @@ function AddItemPage() {
           value={itemIntroduction.itemPrice.value}
           placeholder="판매가격을 입력해주세요"
           onChange={handlePriceChange}
-          onBlur={handleChange}
         />
         <h2>태그</h2>
         <input
@@ -144,12 +162,12 @@ function AddItemPage() {
         />
         <div className="tag-wrapper">
           {itemIntroduction.itemTag.value.map((value, index) => (
-            <ItemTag key={index} value={value} onCancle={handleTagCancel} />
+            <ItemTag key={index} value={value} onCancel={handleTagCancel} />
           ))}
         </div>
       </form>
     </section>
   );
-}
+};
 
 export default AddItemPage;

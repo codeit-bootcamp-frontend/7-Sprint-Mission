@@ -1,22 +1,26 @@
-import React from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "./Header.scss";
-import { getLinkStyle } from "../../../utils/Utils";
-import userImage from "../../../assets/images/icons/ic_user.svg";
-import logoImg from "../../../assets/images/icons/panda-market-logo.svg";
-import { useEffect } from "react";
+import { getActiveLinkStyle, getLinkStyle } from "@/utils/Utils";
+import userImage from "@/assets/images/icons/ic_user.svg";
+import logoImg from "@/assets/images/icons/panda-market-logo.svg";
+import { useEffect, useState } from "react";
+import Button from "../Button";
 
-function Header() {
+const Header = () => {
   const location = useLocation();
   const isAddItemPage = location.pathname === "/additem";
-  const isLoginAndSignupPage =
+  const isLoginOrSignupPage =
     location.pathname === "/login" || location.pathname === "/signup";
+  const [isLogin, setIsLogin] = useState(false);
 
-  useEffect(() => {}, [location]);
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    setIsLogin(!!token);
+  }, [location]);
 
   return (
     <>
-      {!isLoginAndSignupPage && (
+      {!isLoginOrSignupPage && (
         <header className="nav">
           <div id="logo-menu">
             <Link to="/">
@@ -25,7 +29,10 @@ function Header() {
             <div className="menu-area">
               <div className="menu">
                 <h3>
-                  <NavLink to="/freeboard" style={getLinkStyle}>
+                  <NavLink
+                    to="/boards"
+                    style={() => getActiveLinkStyle(["/boards", "/board"])}
+                  >
                     자유게시판
                   </NavLink>
                 </h3>
@@ -46,18 +53,15 @@ function Header() {
               </div>
             </div>
           </div>
-          {!isAddItemPage && (
-            <Link to="/login">
-              <button className="blue-button button">로그인</button>
-            </Link>
-          )}
-          {isAddItemPage && (
-            <img src={userImage} alt="유저 로그인 프로필"></img>
+          {!isLogin ? (
+            <Button href="/login">로그인</Button>
+          ) : (
+            <img src={userImage} alt="유저 로그인 프로필" />
           )}
         </header>
       )}
     </>
   );
-}
+};
 
 export default Header;

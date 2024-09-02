@@ -1,7 +1,7 @@
 .add-item-page {
   width: 1200px;
   margin: 0 auto;
-  padding-top: 24px;
+  padding: 24px 0 60px;
 }
 
 .add-item-page form {
@@ -87,7 +87,7 @@ input::placeholder {
   font-family: "Pretendard", sans-serif;
 }
 
-#itemIntro {
+#itemDescription {
   height: 200px;
 }
 

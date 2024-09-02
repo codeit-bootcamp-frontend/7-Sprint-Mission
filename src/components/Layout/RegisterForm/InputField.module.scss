@@ -1,0 +1,19 @@
+@import "mixins";
+
+.input {
+  width: 100%;
+  font-family: inherit;
+  background-color: var(--gray100);
+  @include font-style(16px, 400, 26px, var(--gray800));
+  padding: 16px 24px;
+  height: 56px;
+  border-radius: 12px;
+
+  &::placeholder {
+    @include font-style(16px, 400, 26px, var(--gray400));
+  }
+
+  &.textarea {
+    height: 282px;
+  }
+}

@@ -1,8 +1,4 @@
-import { FocusEvent } from "react";
-
-type ValidationFunction = (
-  input: string | FocusEvent<HTMLInputElement>
-) => boolean;
+type ValidationFunction = (input: string) => boolean;
 
 export interface AuthFormProps {
   mode: "login" | "signup";
@@ -23,4 +19,18 @@ export interface FieldInfo {
   isEmpty?: boolean;
   value?: string | number | readonly string[] | undefined;
   validationFunction: ValidationFunction;
+}
+
+export interface PageConfigType {
+  mode: "login" | "signup";
+  buttonText: string;
+  infoMessage: string;
+  goToPage: string;
+}
+
+export interface SignUpData {
+  email: string;
+  nickname?: string;
+  password: string;
+  passwordConfirmation?: string;
 }

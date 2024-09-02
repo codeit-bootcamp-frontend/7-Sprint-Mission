@@ -1,91 +1,88 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { Controller, Control, FieldValues } from "react-hook-form";
+import styles from "./Auth.module.scss";
+import { FieldInfo } from "@/types/AuthTypes";
 import TogglePassword from "./TogglePassword";
-import { FieldInfo } from "../../../types/AuthTypes";
-import { useLocation } from "react-router-dom";
-import {
-  checkEmpty,
-  getErrorMessage,
-  setValidationErrorStyle,
-} from "./AuthConfig";
+import { FIELDTYPE } from "./AuthConfig";
 
 interface InputFieldProps {
   field: FieldInfo;
+  control: Control<FieldValues>;
+  error?: string;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ field }) => {
-  const [value, setValue] = useState("");
-  const [inputType, setInputType] = useState(field.type);
-  const { pathname } = useLocation();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const isValid = field.validationFunction(e.target.value);
-    field.isEmpty = checkEmpty(e);
-    field.isValid = !field.isEmpty && isValid;
-    const errorElement = document.querySelector(`.error-message.${field.id}`);
-
-    if (errorElement) {
-      errorElement.textContent = getErrorMessage(
-        field.isEmpty,
-        isValid,
-        field.emptyErrorMessage,
-        field.invalidErrorMessage
-      );
-    }
-
-    setValidationErrorStyle({
-      input: e.target,
-      errorMessage: errorElement,
-      isChecked: field.isEmpty || !isValid,
-    });
-  };
+const InputField: React.FC<InputFieldProps> = ({
+  field: {
+    type,
+    id,
+    label,
+    name,
+    required,
+    emptyErrorMessage,
+    placeholder,
+    autoComplete,
+    invalidErrorMessage,
+    validationFunction,
+  },
+  control,
+  error,
+}) => {
+  const [inputType, setInputType] = useState(type);
 
   const handlePasswordVisible = (updatedVisible: boolean) => {
-    if (field.id === "password" || field.id === "confirmPassword") {
+    if (id === "password" || id === FIELDTYPE.PASSWORDCONFIRMATION) {
       setInputType(updatedVisible ? "text" : "password");
     }
   };
 
-  useEffect(() => {
-    setValue(""); // 페이지 변경시 input value 초기화
-    const inputElement = document.querySelector(`#${field.id}`);
-    const errorElement = document.querySelector(`.error-message.${field.id}`);
-    inputElement?.classList.remove("error-border");
-    errorElement?.classList.remove("visible-maker");
-  }, [pathname, field.id]);
-
   return (
-    <div className="input-area" key={field.id}>
-      <label htmlFor={field.id}>{field.label}</label>
+    <div className={styles["input-area"]} key={id}>
+      <label htmlFor={id}>{label}</label>
       <div
         className={
-          field.name === "password" || field.name === "confirmPassword"
-            ? "password-input"
-            : ""
+          styles[
+            name === FIELDTYPE.PASSWORD ||
+            name === FIELDTYPE.PASSWORDCONFIRMATION
+              ? "password-input"
+              : ""
+          ]
         }
       >
-        <input
-          id={field.id}
-          name={field.name}
-          type={inputType}
-          placeholder={field.placeholder}
-          autoComplete={field.autoComplete}
-          required={field.required}
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={value}
-          className=""
+        <Controller
+          name={id}
+          control={control}
+          defaultValue=""
+          rules={{
+            required: required ? emptyErrorMessage : false,
+            validate: validationFunction
+              ? (value) => validationFunction(value) || invalidErrorMessage
+              : undefined,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <input
+              id={id}
+              name={name}
+              type={inputType}
+              placeholder={placeholder}
+              autoComplete={autoComplete}
+              required={required}
+              onBlur={onBlur}
+              onChange={onChange}
+              value={value}
+              className={error ? styles["error-border"] : ""}
+            />
+          )}
         />
-        {(field.name === "password" || field.name === "confirmPassword") && (
+        {(name === FIELDTYPE.PASSWORD ||
+          name === FIELDTYPE.PASSWORDCONFIRMATION) && (
           <TogglePassword onPasswordVisible={handlePasswordVisible} />
         )}
       </div>
-      <h3 id={`${field.id}-error`} className={`error-message ${field.name}`}>
-        {field.emptyErrorMessage}
-      </h3>
+      {error && (
+        <h3 className={styles["error-message"]}>
+          {error || "에러가 발생했습니다."}
+        </h3>
+      )}
     </div>
   );
 };

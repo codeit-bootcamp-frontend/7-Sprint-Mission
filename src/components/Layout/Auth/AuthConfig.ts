@@ -1,54 +1,55 @@
 import { FocusEvent } from "react";
-import { FieldInfo } from "../../../types/AuthTypes";
+import { FieldInfo, PageConfigType } from "@/types/AuthTypes";
+
+export enum FIELDTYPE {
+  EMAIL = "email",
+  NICKNAME = "nickname",
+  PASSWORD = "password",
+  PASSWORDCONFIRMATION = "passwordConfirmation",
+}
 
 export const fields: { [id: string]: FieldInfo } = {
-  email: {
-    id: "email",
-    name: "email",
+  [FIELDTYPE.EMAIL]: {
+    id: FIELDTYPE.EMAIL,
+    name: FIELDTYPE.EMAIL,
     label: "이메일",
     placeholder: "이메일을 입력해주세요",
-    autoComplete: "email",
-    type: "email",
+    autoComplete: FIELDTYPE.EMAIL,
+    type: FIELDTYPE.EMAIL,
     required: true,
     emptyErrorMessage: "이메일을 입력해주세요.",
     invalidErrorMessage: "잘못된 이메일 형식입니다.",
-    isValid: false,
-    isEmpty: false,
     value: "",
     validationFunction: checkEmail,
   },
-  nickname: {
-    id: "nickname",
-    name: "nickname",
+  [FIELDTYPE.NICKNAME]: {
+    id: FIELDTYPE.NICKNAME,
+    name: FIELDTYPE.NICKNAME,
     label: "닉네임",
     placeholder: "닉네임을 입력해주세요",
-    autoComplete: "nickname",
+    autoComplete: FIELDTYPE.NICKNAME,
     type: "text",
     emptyErrorMessage: "닉네임을 입력해주세요.",
-    invalidErrorMessage: "",
-    isValid: false,
-    isEmpty: false,
+    invalidErrorMessage: "닉네임을 입력해주세요.",
     value: "",
-    validationFunction: () => true,
+    validationFunction: checkNotEmpty,
   },
-  password: {
-    id: "password",
-    name: "password",
+  [FIELDTYPE.PASSWORD]: {
+    id: FIELDTYPE.PASSWORD,
+    name: FIELDTYPE.PASSWORD,
     label: "비밀번호",
     placeholder: "비밀번호를 입력해주세요",
     autoComplete: "new-password",
-    type: "password",
+    type: FIELDTYPE.PASSWORD,
     required: true,
     emptyErrorMessage: "비밀번호를 입력해주세요.",
     invalidErrorMessage: "비밀번호를 8자 이상 입력해주세요.",
-    isValid: false,
-    isEmpty: false,
     value: "",
     validationFunction: checkPasswordLength,
   },
-  confirmPassword: {
-    id: "confirmPassword",
-    name: "confirmPassword",
+  [FIELDTYPE.PASSWORDCONFIRMATION]: {
+    id: FIELDTYPE.PASSWORDCONFIRMATION,
+    name: FIELDTYPE.PASSWORDCONFIRMATION,
     label: "비밀번호 확인",
     placeholder: "비밀번호를 다시 입력해주세요",
     autoComplete: "new-password",
@@ -56,31 +57,20 @@ export const fields: { [id: string]: FieldInfo } = {
     required: true,
     emptyErrorMessage: "비밀번호 확인을 입력해주세요.",
     invalidErrorMessage: "비밀번호가 일치하지 않습니다.",
-    isValid: false,
-    isEmpty: false,
     value: "",
     validationFunction: checkPasswordMatch,
   },
 };
 
-// 공백 검사
-export function checkEmpty(input: FocusEvent<HTMLInputElement>) {
-  return input?.target.value.trim() === "";
+export function checkNotEmpty(value: string): boolean {
+  return value.trim() !== "";
 }
 
-// 이메일 철자 검사
-export function checkEmail(
-  input: string | FocusEvent<HTMLInputElement>
-): boolean {
-  if (typeof input === "string") {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailRegex.test(input);
-  }
-
-  return false;
+export function checkEmail(input: string): boolean {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(input);
 }
 
-// 비밀번호 길이 검사
 export function checkPasswordLength(
   input: string | FocusEvent<HTMLInputElement>
 ): boolean {
@@ -90,38 +80,14 @@ export function checkPasswordLength(
   return false;
 }
 
-// 비밀번호 일치 검사
 export function checkPasswordMatch() {
   const inputPassword = document.querySelector("#password") as HTMLInputElement;
   const inputPasswordConfirmation = document.querySelector(
-    "#confirmPassword"
+    "#passwordConfirmation"
   ) as HTMLInputElement;
-
-  if (inputPasswordConfirmation)
-    console.log(inputPassword?.value === inputPasswordConfirmation?.value);
 
   return inputPassword?.value === inputPasswordConfirmation?.value;
 }
-
-interface SetValidationErrorStyleProps {
-  input: HTMLInputElement;
-  errorMessage: Element | null;
-  isChecked: boolean;
-}
-
-export const setValidationErrorStyle = ({
-  input,
-  errorMessage,
-  isChecked,
-}: SetValidationErrorStyleProps) => {
-  if (isChecked) {
-    input?.classList.add("error-border");
-    errorMessage?.classList.add("visible-maker");
-  } else {
-    input?.classList.remove("error-border");
-    errorMessage?.classList.remove("visible-maker");
-  }
-};
 
 export function getErrorMessage(
   isEmpty: boolean,
@@ -131,3 +97,35 @@ export function getErrorMessage(
 ) {
   return isEmpty ? emptyErrorMessage : isValid ? "" : invalidErrorMessage;
 }
+
+export const getFieldsByMode = (mode: "login" | "signup") => {
+  const baseFields = [fields[FIELDTYPE.EMAIL], fields[FIELDTYPE.PASSWORD]];
+
+  const additionalFieldsByMode: {
+    [key in "signup" | "login"]?: FieldInfo[];
+  } = {
+    signup: [
+      fields[FIELDTYPE.EMAIL],
+      fields[FIELDTYPE.NICKNAME],
+      fields[FIELDTYPE.PASSWORD],
+      fields[FIELDTYPE.PASSWORDCONFIRMATION],
+    ],
+  };
+
+  return additionalFieldsByMode[mode] || baseFields;
+};
+
+export const pageConfig: { [key: string]: PageConfigType } = {
+  login: {
+    mode: "login",
+    buttonText: "회원가입",
+    infoMessage: "판다마켓이 처음이신가요? ",
+    goToPage: "/signup",
+  },
+  signup: {
+    mode: "signup",
+    buttonText: "로그인",
+    infoMessage: "이미 회원이신가요? ",
+    goToPage: "/login",
+  },
+};

@@ -1,10 +1,9 @@
-import React from "react";
-import xIcon from "../../assets/images/icons/ic_x.svg";
-import { ItemTagType } from "../../types/types";
+import xIcon from "@/assets/images/icons/ic_x.svg";
+import { ItemTagType } from "@/types/ProductTypes";
 
-function ItemTag({ value, onCancle }: ItemTagType) {
+const ItemTag: React.FC<ItemTagType> = ({ value, onCancel }) => {
   function handleCencleClick() {
-    onCancle(value);
+    onCancel(value);
   }
 
   return (
@@ -17,6 +16,6 @@ function ItemTag({ value, onCancle }: ItemTagType) {
       </div>
     </>
   );
-}
+};
 
 export default ItemTag;

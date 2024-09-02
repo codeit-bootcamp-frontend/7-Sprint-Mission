@@ -1,0 +1,105 @@
+@import "mixins";
+
+.freeboard-detail-main {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 32px 0 60px;
+}
+
+.board-detail-article-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  h1 {
+    @include font-style(20px, 700, 32px, var(--gray800));
+  }
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.content-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.user-wrapper {
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 40px;
+    height: 40px;
+    margin-right: 16px;
+  }
+
+  h3 {
+    @include font-style(14px, 500, 24px, var(--gray600));
+    margin-right: 8px;
+  }
+
+  span {
+    @include font-style(14px, 400, 24px, var(--gray400));
+  }
+}
+
+.favorite-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px;
+  border: 1px solid var(--gray200);
+  border-radius: 35px;
+  gap: 3px;
+
+  img {
+    width: 32px;
+    height: 32px;
+  }
+
+  span {
+    @include font-style(16px, 500, 26px, var(--gray500));
+  }
+}
+
+.vertical-divider {
+  border-left: 1px solid var(--gray200);
+  width: 0;
+  height: 40px;
+  margin: 0 32px;
+}
+
+.horizontal-divider {
+  border-top: 1px solid var(--gray200);
+  width: 100%;
+  height: 0px;
+  margin: 16px 0 24px;
+}
+
+.content {
+  @include font-style(18px, 400, 26px, var(--gray800));
+}
+
+/* Tablet Styles */
+@media screen and (min-width: 768px) and (max-width: 1199px) {
+  .freeboard-detail-main {
+    width: 100%;
+  }
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 767px) {
+  .freeboard-detail-main {
+    width: 100%;
+  }
+}

@@ -1,0 +1,52 @@
+@import "mixins";
+
+.form {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &.bottom-button {
+    gap: 0;
+    padding: 0;
+
+    .bottom-button {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+
+  .input-label {
+    margin-bottom: 12px;
+    @include font-style(18px, 700, 26px, var(--gray800));
+  }
+}
+
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.title {
+  @include font-style(20px, 700, 32px, var(--gray800));
+}
+
+/* Tablet Styles */
+@media screen and (min-width: 768px) and (max-width: 1199px) {
+  .form {
+    width: 100%;
+  }
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 767px) {
+  .form {
+    width: 100%;
+  }
+}

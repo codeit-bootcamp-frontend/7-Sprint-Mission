@@ -1,10 +1,10 @@
-import React, { ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import { useEffect, useRef, useState } from "react";
-import logoImg from "../../assets/images/icons/ic_plus.svg";
-import xIcon from "../../assets/images/icons/ic_x.svg";
-import { FileInputType } from "../../types/types";
+import logoImg from "@/assets/images/icons/ic_plus.svg";
+import xIcon from "@/assets/images/icons/ic_x.svg";
+import { FileInputType } from "@/types/ProductTypes";
 
-function FileInput({ value, onChange }: FileInputType) {
+const FileInput: React.FC<FileInputType> = ({ value, onChange }) => {
   const [preview, setPreview] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -54,6 +54,6 @@ function FileInput({ value, onChange }: FileInputType) {
       </div>
     </section>
   );
-}
+};
 
 export default FileInput;

@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
-import arrowLeftImg from "../../../assets/images/icons/arrow_left.svg";
-import arrowRightImg from "../../../assets/images/icons/arrow_right.svg";
-import { getPageNumberArray } from "../../../utils/Utils";
-import { PaginationType } from "../../../types/types";
+import arrowLeftImg from "@/assets/images/icons/arrow_left.svg";
+import arrowRightImg from "@/assets/images/icons/arrow_right.svg";
+import { PaginationType } from "@/types/ProductTypes";
+import { calculatePageRange } from "@/utils/Utils";
 
-function Pagination({ onPageChange, pageNumber, currentPage }: PaginationType) {
-  // 페이지 개수만큼 배열에
-  const pageNumberArray = getPageNumberArray(pageNumber);
-  // 활성화 된 페이지
-  const [activePage, setActivePage] = useState(1);
-  // 화살표 비활성화
+const Pagination: React.FC<PaginationType> = ({
+  onPageChange,
+  pageNumber,
+  currentPage,
+  rangeSize = 5,
+}) => {
+  const [pageRange, setPageRange] = useState<number[]>([]);
+  const [activePage, setActivePage] = useState(currentPage);
   const [isArrowDisabled, setIsArrowDisabled] = useState([false, false]);
+
+  useEffect(() => {
+    setPageRange(calculatePageRange(currentPage, pageNumber, rangeSize));
+    setActivePage(currentPage);
+    setIsArrowDisabled([currentPage <= 1, currentPage >= pageNumber]);
+  }, [currentPage, pageNumber, rangeSize]);
 
   const handleLodePage = (num: number) => {
     setActivePage(num);
@@ -23,10 +31,6 @@ function Pagination({ onPageChange, pageNumber, currentPage }: PaginationType) {
     setActivePage(newPage);
     onPageChange(newPage);
   };
-
-  useEffect(() => {
-    setIsArrowDisabled([currentPage <= 1, currentPage >= pageNumber]);
-  }, [currentPage, pageNumber]);
 
   return (
     <>
@@ -42,17 +46,15 @@ function Pagination({ onPageChange, pageNumber, currentPage }: PaginationType) {
         />
       </button>
       <div className="page-nums">
-        {pageNumberArray.map((num, index) => {
-          return (
-            <button
-              className={`circle ${num === activePage ? "active" : ""}`}
-              key={index}
-              onClick={() => handleLodePage(num)}
-            >
-              {num}
-            </button>
-          );
-        })}
+        {pageRange.map((num) => (
+          <button
+            className={`circle ${num === activePage ? "active" : ""}`}
+            key={num}
+            onClick={() => handleLodePage(num)}
+          >
+            {num}
+          </button>
+        ))}
       </div>
       <button
         id="arrowRight"
@@ -67,6 +69,6 @@ function Pagination({ onPageChange, pageNumber, currentPage }: PaginationType) {
       </button>
     </>
   );
-}
+};
 
 export default Pagination;

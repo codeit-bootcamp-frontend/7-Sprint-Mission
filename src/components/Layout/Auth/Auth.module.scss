@@ -1,4 +1,4 @@
-.singup-and-loginpage-main {
+.signup-and-login-page-main {
   width: 640px;
   margin: 0 auto;
 
@@ -9,7 +9,7 @@
     label {
       display: inline-block;
       color: #1f2937;
-      font-size: var(--fontsize-18); /*18px;*/
+      font-size: var(--fontsize-18);
       font-weight: 700;
       margin-bottom: 16px;
     }
@@ -47,7 +47,6 @@
       position: relative;
     }
 
-    /* 유효성 에러 text 기본 비가시성 */
     .error-message {
       margin: 8px 16px 0;
       color: var(--error-red);
@@ -55,16 +54,10 @@
       font-size: var(--fontsize-15);
 
       display: inline-block;
-      display: none;
     }
 
-    /* 에러 보더 설정 */
     .error-border {
       border: 2px solid red;
-    }
-
-    .visible-maker {
-      display: inline-block;
     }
   }
 }
@@ -107,7 +100,7 @@
 
 .goto-page {
   color: #1f2937;
-  font-size: var(--fontsize-15); /*15px*/
+  font-size: var(--fontsize-15);
   line-height: 17.9px;
   font-weight: 500;
   text-align: center;
@@ -130,7 +123,6 @@
   justify-content: center;
 }
 
-/* 유효성 검사 버튼 */
 .valid-button {
   background-color: var(--activate-button-blue);
   cursor: pointer;
@@ -142,9 +134,6 @@
 
 /* Mobile: 767px 이하 */
 @media screen and (max-width: 767px) {
-  /*기본 패딩과 최대 넓이*/
-
-  /*사이즈 위치 조정*/
   .go-home-logo {
     margin: 24px 0;
   }
@@ -153,10 +142,10 @@
     width: 198px;
   }
 
-  .singup-and-loginpage-main {
+  .signup-and-loginpage-main {
     .input-area {
       label {
-        font-size: 0.875em; /*14px;*/
+        font-size: 0.875em;
       }
     }
   }

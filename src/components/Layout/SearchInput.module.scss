@@ -1,0 +1,32 @@
+@import "mixins";
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  height: 42px;
+  background-color: var(--gray100);
+  border: none;
+  border-radius: 12px;
+  padding: 9px 0 9px 40px;
+  font-family: inherit;
+}
+
+.input::placeholder {
+  @include font-style(16px, 400, 26px, var(--gray400));
+}
+
+.search {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+}
