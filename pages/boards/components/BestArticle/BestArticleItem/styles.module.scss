@@ -81,6 +81,6 @@
 
   .post-user-container {
     @include Size(90%, 17px);
-    @include Flex("", space-between, "");
+    @include Flex(initial, space-between, initial);
   }
 }

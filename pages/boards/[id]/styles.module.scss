@@ -93,7 +93,7 @@
 }
 
 .back-button-container {
-  @include Flex("", center, center);
+  @include Flex(initial, center, center);
   padding: 40px 0;
 
   .back-button {

@@ -31,7 +31,7 @@
 }
 
 .title-container {
-  @include Flex(column, "", left);
+  @include Flex(column, initial, left);
 
   .title {
     @include Font(18px, 700, $color-gray-800);
@@ -53,7 +53,7 @@
 }
 
 .content-container {
-  @include Flex(column, "", left);
+  @include Flex(column, initial, left);
 
   .content {
     @include Font(18px, 700, $color-gray-800);
@@ -76,7 +76,7 @@
 }
 
 .add-image-container {
-  @include Flex(column, "", left);
+  @include Flex(column, initial, left);
   position: relative;
 
   .add-image {

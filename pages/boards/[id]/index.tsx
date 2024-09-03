@@ -52,7 +52,7 @@ function BoardsDetail() {
   }, [articleId]);
 
   if (!article) {
-    return <div>게시글이 없습니다..!</div>;
+    return <div>게시글이 없습니다.!</div>;
   }
 
   return (

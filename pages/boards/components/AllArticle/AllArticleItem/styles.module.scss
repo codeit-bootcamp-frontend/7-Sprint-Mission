@@ -7,7 +7,7 @@
 }
 
 .post-top-info {
-  @include Flex(row, space-between, "");
+  @include Flex(row, space-between, initial);
   padding-bottom: 16px;
   min-height: 88px;
   text-decoration: none;
@@ -49,7 +49,7 @@
 
     .like-image-wrapper {
       @include Size(24px, 24px);
-      @include Flex("", center, center);
+      @include Flex(initial, center, center);
     }
 
     .like-count {

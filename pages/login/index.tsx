@@ -1,7 +1,7 @@
 import styles from "@/pages/login/styles.module.scss";
 import logo from "@/assets/icons/logo/logo.svg";
-import kakao from "@/assets/icons/social/ic_google.svg";
-import google from "@/assets/icons/social/ic_kakao.svg";
+import kakaoIcon from "@/assets/icons/social/ic_google.svg";
+import googleIcon from "@/assets/icons/social/ic_kakao.svg";
 import visibleButton from "@/assets/icons/ic_visibility_on.svg";
 import noneVisibleButton from "@/assets/icons/ic_visibility_none.svg";
 import Image from "next/image";
@@ -26,16 +26,24 @@ function Login() {
         <div>
           <span></span>
           <div>
-            <Link href={"https://goggle.com"}>
-              <Image src={google} alt="구글" />
-            </Link>
-            <Link href={"https://kakao.com"}>
-              <Image src={kakao} alt="카카오톡" />
-            </Link>
+            <a
+              href="https://google.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image src={googleIcon} alt="구글" />
+            </a>
+            <a
+              href="https://kakao.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image src={kakaoIcon} alt="카카오톡" />
+            </a>
           </div>
         </div>
         <p>
-          판마다켓이 처음이신가요? <span>회원가입</span>
+          판마다켓이 처음이신가요? <Link href="/signup">회원가입</Link>
         </p>
       </div>
     </div>

@@ -41,7 +41,7 @@
 
   .feature-card {
     @include Size(955px, 444px);
-    @include Flex(row, "", center);
+    @include Flex(row, initial, center);
     background-color: $color-bg-comment;
 
     .feature-element {
@@ -74,13 +74,13 @@
 
 .feature-reverse-wrapper {
   max-width: 1200px;
-  @include Flex(row, right, "");
+  @include Flex(row, right, initial);
   margin: 0 auto;
   padding: 138px 0;
 
   .feature-card {
     @include Size(955px, 444px);
-    @include Flex(row-reverse, "", center);
+    @include Flex(row-reverse, initial, center);
     background-color: $color-bg-comment;
 
     .feature-element {

@@ -2,14 +2,14 @@
 
 .container {
   @include Size(640px, auto);
-  @include Flex(column, "", center);
+  @include Flex(column, initial, center);
   margin: 0 auto;
 
   .element-wrapper {
     @include Size(100%, auto);
 
     .email {
-      @include Flex(column, left, left);
+      @include Flex(column, flex-start, left);
     }
   }
 }
