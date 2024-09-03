@@ -1,3 +1,5 @@
+import { ArticlePostData } from "./ArticleTypes";
+
 export interface Item {
   id: number;
   price: number;
@@ -15,6 +17,7 @@ export interface FetchDataType {
 export interface PaginationType extends FetchDataType {
   onPageChange: (option: number) => void;
   pageNumber: number;
+  rangeSize?: number;
 }
 
 export interface ProductSearchType {
@@ -23,7 +26,7 @@ export interface ProductSearchType {
 
 export interface ItemTagType {
   value: string;
-  onCancle: (tagValue: string) => void;
+  onCancel: (tagValue: string) => void;
 }
 
 export interface FileInputType {
@@ -57,3 +60,37 @@ export type CommentType = {
     nickname: string;
   };
 };
+
+export interface CreateProductParams {
+  productData?: UnifiedPostData;
+  productUrl: string;
+}
+
+export interface DeleteProductParams {
+  productUrl: string;
+  productId: number;
+  relatedArticleId?: string;
+}
+
+export interface ProductPostData {
+  images: string[];
+  tags: string[];
+  price: number;
+  description: string;
+  name: string;
+}
+
+export interface CommentPostData {
+  content: string;
+}
+
+export type UnifiedPostData =
+  | ProductPostData
+  | ArticlePostData
+  | CommentPostData
+  | null;
+
+export interface UpdateProductParams {
+  productUrl: string;
+  productData: CommentPostData | ProductPostData;
+}

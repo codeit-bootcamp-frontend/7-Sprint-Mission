@@ -1,37 +1,53 @@
-import React from "react";
 import "./Footer.css";
-import facebookLogo from "../../../assets/images/social/facebook-logo.svg";
-import twitterLogo from "../../../assets/images/social/twitter-logo.svg";
-import youtubeLogo from "../../../assets/images/social/youtube-logo.svg";
-import instagramLogo from "../../../assets/images/social/instagram-logo.svg";
+import facebookLogo from "@/assets/images/social/facebook-logo.svg";
+import twitterLogo from "@/assets/images/social/twitter-logo.svg";
+import youtubeLogo from "@/assets/images/social/youtube-logo.svg";
+import instagramLogo from "@/assets/images/social/instagram-logo.svg";
 import { Link } from "react-router-dom";
+
+interface Image {
+  src: string;
+  alt: string;
+  width: number;
+}
 
 interface SocialLink {
   href: string;
-  imgSrc: string;
-  alt: string;
+  img: Image;
 }
 
 const socialLinks: SocialLink[] = [
   {
     href: "https://www.facebook.com",
-    imgSrc: facebookLogo,
-    alt: "페이스북",
+    img: {
+      src: facebookLogo,
+      alt: "페이스북",
+      width: 20,
+    },
   },
   {
     href: "https://twitter.com/",
-    imgSrc: twitterLogo,
-    alt: "트위터",
+    img: {
+      src: twitterLogo,
+      alt: "트위터",
+      width: 20,
+    },
   },
   {
     href: "https://www.youtube.com/",
-    imgSrc: youtubeLogo,
-    alt: "유튜브",
+    img: {
+      src: youtubeLogo,
+      alt: "유튜브",
+      width: 20,
+    },
   },
   {
     href: "https://www.instagram.com/",
-    imgSrc: instagramLogo,
-    alt: "인스타그램",
+    img: {
+      src: instagramLogo,
+      alt: "인스타그램",
+      width: 20,
+    },
   },
 ];
 
@@ -57,9 +73,9 @@ const Footer: React.FC = () => {
         ))}
       </div>
       <div id="socialMedia">
-        {socialLinks.map(({ href, imgSrc, alt }, index) => (
-          <a key={index} href={href} target="_blank" rel="noopener noreferrer">
-            <img src={imgSrc} alt={alt} width="20" />
+        {socialLinks.map(({ href, img: { src, alt, width } }) => (
+          <a key={alt} href={href} target="_blank" rel="noopener noreferrer">
+            <img src={src} alt={alt} width={width} />
           </a>
         ))}
       </div>

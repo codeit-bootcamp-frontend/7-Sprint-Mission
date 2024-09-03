@@ -1,19 +1,21 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import "../UsedMarketPage.css";
 import { Link } from "react-router-dom";
-import searchImg from "../../../assets/images/icons/ic_search.svg";
-import useDeviceType from "../../../hooks/useDeviceType";
-import dropdownImg from "../../../assets/images/icons/ic_sort.svg";
+import searchImg from "@/assets/images/icons/ic_search.svg";
 import { useSearchParams } from "react-router-dom";
-import { ProductSearchType } from "../../../types/types";
+import { ProductSearchType } from "@/types/ProductTypes";
+import SortDropdown from "@/components/Layout/Dropdown/SortDropdown";
+import {
+  defaultOrderType,
+  orderTypeKeysKR,
+  orderTypeKR,
+  orderTypeUS,
+} from "@/constants/orderConstants";
 
 const FAVORITE_ORDER = "favorite";
-const RECENT_ORDER = "recent";
 
-function ProductSearch({ onOptionChange }: ProductSearchType) {
-  const [selectedOption, setSelectedOption] = useState("최신순");
-  const [isOpen, setIsOpen] = useState(false);
-
+const ProductSearch: React.FC<ProductSearchType> = ({ onOptionChange }) => {
+  const items = orderTypeKeysKR;
   const [searchParam, setSearchParam] = useSearchParams();
   const initKeyword = searchParam.get("keyword");
   const [keyword, setKeyword] = useState(initKeyword || "");
@@ -21,16 +23,12 @@ function ProductSearch({ onOptionChange }: ProductSearchType) {
   const handleKeywordChange = (e: ChangeEvent<HTMLInputElement>) =>
     setKeyword(e.target.value);
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const { isMobile } = useDeviceType();
-
-  const handleOptionClick = (option: string) => {
-    setSelectedOption(option === FAVORITE_ORDER ? "좋아요순" : "최신순");
-    onOptionChange(option);
-    setIsOpen(false);
+  const handleOrderChange = (option: string) => {
+    onOptionChange(
+      orderTypeUS[option as keyof typeof orderTypeUS] !== defaultOrderType
+        ? FAVORITE_ORDER
+        : orderTypeUS[option as keyof typeof orderTypeUS]
+    );
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -59,26 +57,14 @@ function ProductSearch({ onOptionChange }: ProductSearchType) {
             </button>
           </Link>
         </form>
-        <div className="dropdown">
-          <button className="dropdown-toggle" onClick={toggleDropdown}>
-            {!isMobile ? selectedOption : null}
-            {!isMobile && <span className="arrow">{isOpen ? "▲" : "▼"}</span>}
-            {isMobile && (
-              <img id="dropdown-img" src={dropdownImg} alt="드롭다운 버튼" />
-            )}
-          </button>
-          {isOpen && (
-            <ul className="dropdown-menu">
-              <li onClick={() => handleOptionClick(RECENT_ORDER)}>최신순</li>
-              <li onClick={() => handleOptionClick(FAVORITE_ORDER)}>
-                좋아요순
-              </li>
-            </ul>
-          )}
-        </div>
+        <SortDropdown
+          onOrderChange={handleOrderChange}
+          items={items}
+          defaultOrderType={orderTypeKR[defaultOrderType]}
+        />
       </div>
     </div>
   );
-}
+};
 
 export default ProductSearch;

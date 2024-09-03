@@ -1,65 +1,65 @@
-import React from "react";
 import { useParams } from "react-router-dom";
-import { getProductDetails } from "../../api/api";
 import { useEffect, useState } from "react";
 import ProductDetails from "./components/ProductDetails";
-import CommentsSection from "./components/CommentsSection";
-import GoBackToListButton from "./components/GoBackToListButton";
+import CommentsSection from "@/components/Layout/Comment/CommentsSection";
+import GoBackToListButton from "@/components/Layout/Comment/GoBackToListButton";
 import "./ProductDetailPage.scss";
-import { CommentType, ProductDetailType } from "../../types/types";
+import { ProductDetailType } from "@/types/ProductTypes";
+import { CommentObject } from "@/types/ArticleTypes";
+import { commentInfo, fields } from "./components/ProductDetailConfig";
+import RegisterForm from "@/components/Layout/RegisterForm/RegisterForm";
+import { getProductDetails } from "@/lib/productApi";
+import { useQuery } from "@tanstack/react-query";
 
-function ProductDetailPage() {
-  // 해당 페이지의 productId를 받아옴
-  const { productId } = useParams();
+const ProductDetailPage = () => {
+  const { productId } = useParams<string>();
+  const formFields = fields;
 
-  console.log(productId);
-  // 상품 상세 내용을 서버에서 받아올 객체
-  const [productDetail, setProductDetail] = useState<ProductDetailType>({
-    id: 0,
-    name: "",
-    description: "",
-    price: 0,
-    tags: [],
-    images: [],
-    ownerId: 0,
-    favoriteCount: 0,
-    createdAt: "",
-    updatedAt: "",
-    isFavorite: false,
+  const {
+    data: productDetail,
+    isLoading: isProductLoading,
+    isError: isProductError,
+    error: productError,
+  } = useQuery({
+    queryKey: ["productDetails", productId],
+    queryFn: () => getProductDetails({ productId: Number(productId) }),
+    enabled: !!productId,
   });
 
-  // 코멘트 리스트를 서버에서 받아올 배열
-  const [productComments, setProductComments] = useState<CommentType[]>([]);
-
-  const fetchData = async () => {
-    try {
-      const productDetailResult = await getProductDetails({
-        productId: Number(productId),
-      });
-
-      const productCommentResult = await getProductDetails({
+  const {
+    data: commentsData,
+    isLoading: isCommentsLoading,
+    isError: isCommentsError,
+    error: commentsError,
+  } = useQuery({
+    queryKey: ["comments", productId],
+    queryFn: () =>
+      getProductDetails({
         productId: Number(productId),
         comments: true,
-      });
+      }),
+    select: (result) => ({
+      ...commentInfo,
+      comments: result.list ?? [],
+    }),
+    enabled: !!productId,
+  });
 
-      setProductDetail(productDetailResult);
-      setProductComments(productCommentResult.list);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  if (isProductLoading || isCommentsLoading) return <p>Loading...</p>;
+  if (isProductError || isCommentsError) {
+    return <p>Error: {productError?.message || commentsError?.message}</p>;
+  }
 
-  useEffect(() => {
-    fetchData();
-  }, [productId]);
+  const comments: CommentObject = commentsData || commentInfo;
 
   return (
     <section className="productDetailsMain">
-      <ProductDetails productDetails={productDetail} />
-      <CommentsSection productComments={productComments} />
-      <GoBackToListButton />
+      <ProductDetails productDetails={productDetail || {}} />
+      <RegisterForm fields={formFields} bottomButton={true} />
+      <CommentsSection comments={comments} isLoading={isCommentsLoading} />
+      <GoBackToListButton href="/items" />
     </section>
   );
-}
+};
 
 export default ProductDetailPage;

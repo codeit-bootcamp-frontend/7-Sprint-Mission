@@ -87,6 +87,8 @@ h1 {
 .item-image.all-item {
   width: 221px;
   height: 221px;
+  object-fit: cover;
+  border-radius: 16px;
 }
 
 .list-area.all-area {
@@ -100,7 +102,6 @@ h1 {
 
 form {
   display: flex;
-  align-items: center;
   gap: 12px;
   width: 100%;
 }
@@ -256,13 +257,14 @@ form {
   .item-image.all-item {
     width: 100%;
     height: 100%;
+    aspect-ratio: 1 / 1;
   }
 
   .list-area.all-area {
     gap: 16px;
   }
 
-  .list {
+  .list-area a {
     flex: 0 0 calc(50% - 16px);
   }
 
@@ -294,14 +296,11 @@ form {
   .item-image.all-item {
     width: 100%;
     height: 100%;
+    aspect-ratio: 1 / 1;
   }
 
   .list-area.all-area {
     gap: 8px;
-  }
-
-  .list {
-    flex: 0 0 calc(100%);
   }
 
   .all-area a {

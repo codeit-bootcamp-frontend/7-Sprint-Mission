@@ -1,7 +1,7 @@
 import React from "react";
-import bestProductThumbnail from "../../assets/images/home/bestseller-product-thumbnail.png";
-import searchDesiredProducts from "../../assets/images/home/search-desired-products.png";
-import registerProductsSale from "../../assets/images/home/register-products-for-sale.png";
+import bestProductThumbnail from "@/assets/images/home/bestseller-product-thumbnail.png";
+import searchDesiredProducts from "@/assets/images/home/search-desired-products.png";
+import registerProductsSale from "@/assets/images/home/register-products-for-sale.png";
 import "./HomePage.css";
 import { Link } from "react-router-dom";
 

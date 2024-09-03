@@ -1,11 +1,9 @@
-import React from "react";
-
-function FreeBoardPage() {
+const FreeBoardPage = () => {
   return (
     <>
       <h1>자유게시판</h1>
     </>
   );
-}
+};
 
 export default FreeBoardPage;

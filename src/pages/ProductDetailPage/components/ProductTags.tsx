@@ -1,5 +1,3 @@
-import React from "react";
-
 const ProductTags = ({ tag }: { tag: string }) => {
   return (
     <>
