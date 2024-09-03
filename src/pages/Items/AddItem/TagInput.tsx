@@ -5,10 +5,11 @@ import { IsValid } from "./AddItem";
 
 interface Props {
   isValueCheck: (currentValue: string | string[], name: keyof IsValid) => void;
+  tags?: string[];
 }
 
-const TagInput = ({ isValueCheck }: Props) => {
-  const [tagArr, setTagArr] = useState<Set<string>>(new Set());
+const TagInput = ({ isValueCheck, tags }: Props) => {
+  const [tagArr, setTagArr] = useState<Set<string>>(new Set(tags));
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {

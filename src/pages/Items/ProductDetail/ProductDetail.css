@@ -23,6 +23,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .product-info-section .product-name {
@@ -37,6 +38,33 @@
   border: none;
   background-color: transparent;
   cursor: pointer;
+}
+
+.product-info-section .order-dropdown {
+  position: absolute;
+  right: 0;
+  top: 30px;
+  margin-top: 4px;
+  width: 139px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.product-info-section .order-option {
+  padding: 16px 0 12px;
+  width: 100%;
+  height: 46px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+  /* line-height: 26px; */
+  color: #6b7280;
+}
+
+.product-info-section .order-option.delete {
+  padding: 12px 17px 16px;
 }
 
 .product-info-section .product-price {
@@ -157,12 +185,13 @@
   font-size: 16px;
   font-weight: 600;
   color: #fff;
-  background-color: #9ca3af;
+  background-color: var(--main-color);
+  cursor: pointer;
 }
 
 .product-inquiry-section .inquiry-btn-wrap > button:disabled {
-  background-color: #3692ff;
-  cursor: pointer;
+  background-color: #9ca3af;
+  cursor: default;
 }
 
 .product-comment-section .product-comment-wrap {
@@ -170,9 +199,85 @@
   border-bottom: 1px solid #e5e7eb;
 }
 
+.product-comment-section .product-comment-wrap .product-comment-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
 .product-comment-section .product-comment {
   font-size: 16px;
   font-weight: 400;
+}
+
+.product-comment-section .product-comment-btn {
+  padding: 0;
+  line-height: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.product-comment-section .order-dropdown {
+  position: absolute;
+  right: 0;
+  top: 30px;
+  margin-top: 4px;
+  width: 139px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.product-comment-section .order-option {
+  padding: 16px 0 12px;
+  width: 100%;
+  height: 46px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+  /* line-height: 26px; */
+  color: #6b7280;
+}
+
+.product-comment-section .order-option.delete {
+  padding: 12px 17px 16px;
+}
+
+.product-comment-section .product-comment-top-edit {
+  width: 100%;
+  height: 80px;
+}
+
+.product-comment-section .product-comment-top-edit label {
+  display: none;
+}
+
+.product-comment-section .product-comment-top-edit textarea {
+  padding: 16px 24px;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--cool-gray-800);
+  background-color: var(--cool-gray-100);
+  outline: none;
+  resize: none;
+}
+.product-comment-section .product-comment-top-edit textarea::placeholder {
+  font-size: 16px;
+  font-weight: 400;
+  color: #9ca3af;
+}
+
+.product-comment-section .product-comment-bottom {
+  display: flex;
+  justify-content: space-between;
 }
 
 .product-comment-section .product-profile-wrap {
@@ -182,10 +287,18 @@
   margin-top: 24px;
 }
 
+.product-comment-section .product-profile-edit-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
 .product-comment-section .product-profile-img {
   display: block;
   width: 40px;
   height: 40px;
+  border-radius: 50%;
   background-color: #9ca3af;
 }
 
@@ -201,6 +314,43 @@
   font-size: 12px;
   font-weight: 400;
   color: #9ca3af;
+}
+
+.product-comment-section .product-comment-edit {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.product-comment-section .product-comment-edit .comment-cancel {
+  width: 68px;
+  height: 42px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 26px;
+  color: #737373;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.product-comment-section .product-comment-edit .comment-edit {
+  width: 106px;
+  height: 42px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 26px;
+  color: var(--cool-gray-100);
+  background-color: var(--main-color);
+  cursor: pointer;
+}
+.product-comment-section .product-comment-edit .comment-edit:disabled {
+  background-color: #9ca3af;
+  color: #fff;
+  cursor: default;
 }
 
 .product-inquiry-img-wrap {

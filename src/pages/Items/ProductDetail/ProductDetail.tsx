@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import "./ProductDetail.css";
 import { getProductDetailItem, getProductDetailComments } from "../api";
 import backIcon from "../../../assets/ic_back.svg";
@@ -33,47 +33,45 @@ export interface Comment {
   };
 }
 
-interface Comments {
-  list: Comment[];
-  nextCursor: string | null;
-}
-
 const ProductDetail = () => {
   const { id } = useParams();
-  const [detailItem, setDetailItem] = useState<DetailItem>({
-    id: 0,
-    name: "",
-    description: "",
-    price: 0,
-    tags: [],
-    images: [],
-    ownerId: 0,
-    favoriteCount: 0,
-    createdAt: "",
-    updatedAt: "",
-    isFavorite: false,
-  });
-  const [comments, setComments] = useState<Comments>({
-    list: [],
-    nextCursor: null,
+  const productCommentsKey = "productComments";
+
+  const {
+    data: detailItem,
+    isLoading: isDetailLoading,
+    error: detailError,
+  } = useQuery({
+    queryKey: ["productDetail", id],
+    queryFn: () => getProductDetailItem(id),
   });
 
-  useEffect(() => {
-    const getProductDetail = async () => {
-      const item = await getProductDetailItem(id);
-      const comment = await getProductDetailComments(id);
-      setDetailItem(item);
-      setComments(comment);
-    };
+  const {
+    data: comments,
+    isLoading: isCommentsLoading,
+    error: commentsError,
+  } = useQuery({
+    queryKey: [productCommentsKey, id],
+    queryFn: () => getProductDetailComments(id),
+  });
 
-    getProductDetail();
-  }, [id]);
+  if (isDetailLoading || isCommentsLoading) {
+    return <div className="product-container">로딩 중...</div>;
+  }
+
+  if (detailError || commentsError) {
+    return <div className="product-container">에러가 발생했습니다.</div>;
+  }
 
   return (
     <div className="product-container">
-      <ProductDetailInfo detailItem={detailItem} />
-      <ProductDetailInquiry />
-      <ProductDetailComments comments={comments.list} />
+      <ProductDetailInfo detailItem={detailItem} productId={id} />
+      <ProductDetailInquiry productId={id} commentKey={productCommentsKey} />
+      <ProductDetailComments
+        comments={comments.list}
+        productId={id}
+        commentKey={productCommentsKey}
+      />
       <Link
         to="/items"
         className={`product-back-link ${

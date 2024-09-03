@@ -48,5 +48,6 @@ export const login = async (email: string, password: string) => {
   };
   const data = await fetchRequest(`${API_BASE_URL}/auth/signIn`, options);
   localStorage.setItem("accessToken", data.accessToken);
+  localStorage.setItem("userId", data.user.id);
   return data;
 };

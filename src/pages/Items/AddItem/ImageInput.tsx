@@ -5,20 +5,20 @@ import deleteHoverIcon from "../../../assets/ic_X_hover.svg";
 
 interface Props {
   imgFileUpload: (imgFile: FormData) => void;
+  image?: string;
 }
 
-const ImageInput = ({ imgFileUpload }: Props) => {
+const ImageInput = ({ imgFileUpload, image = "" }: Props) => {
   const [imgFile, setImgFile] = useState<File | null>(null);
-  const [imgPreview, setImgPreview] = useState<string>("");
+  const [imgPreview, setImgPreview] = useState<string>(image);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (e.target.files) {
-      setImgFile(e.target.files[0]);
-    }
 
     if (file) {
+      setImgFile(file);
+
       const formData = new FormData();
       formData.append("image", file);
       imgFileUpload(formData);
@@ -34,6 +34,7 @@ const ImageInput = ({ imgFileUpload }: Props) => {
       fileInputRef.current.value = "";
     }
     setImgFile(null);
+    setImgPreview("");
   };
 
   useEffect(() => {
@@ -73,7 +74,7 @@ const ImageInput = ({ imgFileUpload }: Props) => {
         {imgPreview && (
           <div className="preview-wrap">
             <img
-              src={imgPreview}
+              src={imgPreview || image}
               alt="이미지미리보기"
               className="image-preview"
             />

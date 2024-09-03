@@ -7,6 +7,7 @@ const MyPage = () => {
 
   const handleLogoutClick = () => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("userId");
     navigate("/login");
   };
 

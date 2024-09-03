@@ -11,7 +11,7 @@ export interface Product {
   updatedAt: string;
 }
 
-export interface postProduct {
+export interface PostProduct {
   images: string[];
   tags: string[];
   price: number;

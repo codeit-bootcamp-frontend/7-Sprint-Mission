@@ -13,6 +13,7 @@ interface Props {
 }
 
 const AllProductList = ({ pageSize, title, TopContainer }: Props) => {
+  const token = localStorage.getItem("accessToken");
   // api 상태 관리
   const [product, setProduct] = useState<Product[]>([
     {
@@ -75,7 +76,11 @@ const AllProductList = ({ pageSize, title, TopContainer }: Props) => {
               />
             </div>
             <Link to="/additem">
-              <button className="product-registration-btn" type="button">
+              <button
+                className="product-registration-btn"
+                type="button"
+                disabled={!token}
+              >
                 상품 등록하기
               </button>
             </Link>

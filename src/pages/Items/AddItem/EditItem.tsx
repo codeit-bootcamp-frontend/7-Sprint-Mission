@@ -1,13 +1,13 @@
 import { useState, useEffect, MouseEvent, KeyboardEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./AddItem.css";
 import ImageInput from "./ImageInput";
 import TagInput from "./TagInput";
 import PriceInput from "./PriceInput";
 import TitleInput from "./TitleInput";
 import DescriptionInput from "./DescriptionInput";
-import { postAddItem, postUploadImage } from "../api";
-import { useMutation } from "@tanstack/react-query";
+import { editItem, postUploadImage, getProductDetailItem } from "../api";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { PostProduct } from "../../../types/product";
 
 export interface IsValid {
@@ -17,22 +17,29 @@ export interface IsValid {
   tags: boolean;
 }
 
-const AddItem = () => {
+const EditItem = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const [disabled, setDisabled] = useState(false);
   const [isValid, setIsValid] = useState<IsValid>({
-    name: false,
-    description: false,
-    price: false,
-    tags: false,
+    name: true,
+    description: true,
+    price: true,
+    tags: true,
   });
+
+  const { data: detailItem } = useQuery({
+    queryKey: ["productDetail", id],
+    queryFn: () => getProductDetailItem(id),
+  });
+
   const [inputValues, setInputValues] = useState<PostProduct>({
-    images: [],
-    name: "",
-    description: "",
-    price: 0,
-    tags: [],
+    images: detailItem.images[0],
+    name: detailItem.name,
+    description: detailItem.description,
+    price: detailItem.price,
+    tags: detailItem.tags,
   });
 
   const isValueCheck = (
@@ -75,7 +82,13 @@ const AddItem = () => {
   };
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (newPost: PostProduct) => postAddItem(newPost),
+    mutationFn: ({
+      newInputValues,
+      productId,
+    }: {
+      newInputValues: PostProduct;
+      productId: number;
+    }) => editItem(newInputValues, productId),
     onSuccess: ({ id }) => {
       navigate(`/items/${id}`);
     },
@@ -83,13 +96,14 @@ const AddItem = () => {
 
   const handleSubmit = (e: MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const productId = Number(id);
 
     const newInputValues = {
       ...inputValues,
       price: Number(inputValues.price),
     };
 
-    mutate(newInputValues);
+    mutate({ newInputValues, productId });
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
@@ -116,13 +130,16 @@ const AddItem = () => {
           등록
         </button>
       </div>
-      <ImageInput imgFileUpload={imgFileUpload} />
-      <TitleInput isValueCheck={isValueCheck} />
-      <DescriptionInput isValueCheck={isValueCheck} />
-      <PriceInput isValueCheck={isValueCheck} />
-      <TagInput isValueCheck={isValueCheck} />
+      <ImageInput imgFileUpload={imgFileUpload} image={detailItem.images[0]} />
+      <TitleInput isValueCheck={isValueCheck} name={detailItem.name} />
+      <DescriptionInput
+        isValueCheck={isValueCheck}
+        description={detailItem.description}
+      />
+      <PriceInput isValueCheck={isValueCheck} price={detailItem.price} />
+      <TagInput isValueCheck={isValueCheck} tags={detailItem.tags} />
     </form>
   );
 };
 
-export default AddItem;
+export default EditItem;

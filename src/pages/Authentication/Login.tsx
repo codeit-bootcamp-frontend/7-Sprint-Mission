@@ -49,6 +49,13 @@ const Login = () => {
 
   const eyesImgRef = useRef<HTMLImageElement | null>(null);
 
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail((prevEmail) => ({
       ...prevEmail,
@@ -157,13 +164,6 @@ const Login = () => {
       console.error("로그인에 실패했습니다.", error);
     }
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      navigate("/");
-    }
-  }, [navigate]);
 
   useEffect(() => {
     setDisabled(!(email.isValid === false && password.isValid === false));
